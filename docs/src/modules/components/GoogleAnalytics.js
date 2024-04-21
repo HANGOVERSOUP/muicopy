@@ -7,6 +7,18 @@ import { useNoSsrCodeStyling } from 'docs/src/modules/utils/codeStylingSolution'
 import { useUserLanguage } from '@mui/docs/i18n';
 import { pathnameToLanguage } from 'docs/src/modules/utils/helpers';
 
+function handleClick2(event) {
+  const isRangeSelection = document.getSelection().type === 'Range';
+
+  if (isRangeSelection) {
+    console.log('prevent');
+    event.preventDefault();
+    return;
+  }
+  console.log("don't prevent");
+  return;
+}
+
 // So we can write code like:
 //
 // <Button
@@ -54,6 +66,24 @@ function GoogleAnalytics() {
       document.addEventListener('click', handleClick);
     }
   }, []);
+
+  React.useEffect(() => {
+    const elements = document.getElementsByClassName('title-link-to-anchor');
+
+    for (var i = 0; i < elements.length; i++) {
+      elements[i].addEventListener('click', handleClick2, false);
+    }
+
+    // document.addEventListener('click', handleClick2);
+
+    return () => {
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].removeEventListener('click', handleClick2);
+      }
+      // document.removeEventListener('click', handleClick2);
+    };
+  }, []);
+
   const router = useRouter();
   const timeout = React.useRef();
 
