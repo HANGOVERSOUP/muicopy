@@ -13,7 +13,7 @@ export interface PigmentOptions extends Omit<VitePluginOptions, 'themeArgs'> {
   /**
    * The theme object that you want to be passed to the `styled` function
    */
-  theme: Theme;
+  theme?: Theme;
 }
 
 const VIRTUAL_CSS_FILE = `\0zero-runtime-styles.css`;
@@ -36,7 +36,7 @@ function isZeroRuntimeProcessableFile(fileName: string, transformLibraries: stri
   );
 }
 
-export function pigment(options: PigmentOptions) {
+export function pigment(options?: PigmentOptions) {
   const {
     theme,
     babelOptions = {},
@@ -61,11 +61,11 @@ export function pigment(options: PigmentOptions) {
         return null;
       },
       load(id) {
-        if (id === VIRTUAL_CSS_FILE) {
+        if (id === VIRTUAL_CSS_FILE && theme) {
           return generateTokenCss(theme);
         }
         if (id === VIRTUAL_THEME_FILE) {
-          return `export default ${JSON.stringify(generateThemeTokens(theme))};`;
+          return `export default ${theme ? JSON.stringify(generateThemeTokens(theme)) : {}};`;
         }
         return null;
       },
