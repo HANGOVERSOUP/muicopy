@@ -17,7 +17,7 @@ const validBundles = [
 ];
 
 async function run(argv) {
-  const { bundle, largeFiles, outDir: relativeOutDir, verbose } = argv;
+  const { bundle, exportFormat, largeFiles, outDir: relativeOutDir, verbose } = argv;
 
   if (validBundles.indexOf(bundle) === -1) {
     throw new TypeError(
@@ -29,6 +29,7 @@ async function run(argv) {
     NODE_ENV: 'production',
     BABEL_ENV: bundle,
     MUI_BUILD_VERBOSE: verbose,
+    MUI_ADD_IMPORT_EXTENSIONS: exportFormat === 'exports',
   };
   const babelConfigPath = path.resolve(getWorkspaceRoot(), 'babel.config.js');
   const srcDir = path.resolve('./src');
@@ -82,6 +83,10 @@ async function run(argv) {
     babelArgs.push('--compact false');
   }
 
+  if (exportFormat === 'exports' && bundle !== 'node') {
+    babelArgs.push('--out-file-extension', '.mjs');
+  }
+
   const command = ['pnpm babel', ...babelArgs].join(' ');
 
   if (verbose) {
@@ -109,6 +114,12 @@ yargs(process.argv.slice(2))
         .positional('bundle', {
           description: `Valid bundles: "${validBundles.join('" | "')}"`,
           type: 'string',
+        })
+        .option('exportFormat', {
+          type: 'string',
+          options: ['exports', 'legacy'],
+          default: 'legacy',
+          describe: 'Set to `exports` to build the package with the `exports` field.',
         })
         .option('largeFiles', {
           type: 'boolean',
