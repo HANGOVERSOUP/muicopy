@@ -136,6 +136,8 @@ const Root = styled('div')(
         position: 'relative',
         display: 'flex',
         alignItems: 'center',
+        userSelect: 'text',
+        '-webkit-user-drag': 'none',
       },
       '& .anchor-icon': {
         // To prevent the link to get the focus.
