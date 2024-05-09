@@ -7,23 +7,16 @@ import composeClasses from '@mui/utils/composeClasses';
 import { emphasize } from '@mui/system/colorManipulator';
 import { styled, createUseThemeProps } from '../zero-styled';
 import Fab from '../Fab';
-import Tooltip from '../Tooltip';
-import capitalize from '../utils/capitalize';
-import speedDialActionClasses, { getSpeedDialActionUtilityClass } from './speedDialActionClasses';
+import Tooltip, { tooltipClasses } from '../Tooltip';
+import { getSpeedDialActionUtilityClass } from './speedDialActionClasses';
 
 const useThemeProps = createUseThemeProps('MuiSpeedDialAction');
 
 const useUtilityClasses = (ownerState) => {
-  const { open, tooltipPlacement, classes } = ownerState;
+  const { open, classes } = ownerState;
 
   const slots = {
     fab: ['fab', !open && 'fabClosed'],
-    staticTooltip: [
-      'staticTooltip',
-      `tooltipPlacement${capitalize(tooltipPlacement)}`,
-      !open && 'staticTooltipClosed',
-    ],
-    staticTooltipLabel: ['staticTooltipLabel'],
   };
 
   return composeClasses(slots, getSpeedDialActionUtilityClass, classes);
@@ -186,25 +179,19 @@ const SpeedDialAction = React.forwardRef(function SpeedDialAction(inProps, ref) 
 
   if (tooltipOpenProp) {
     return (
-      <SpeedDialActionStaticTooltip
+      <PersistentTooltip
         id={id}
         ref={ref}
-        className={classes.staticTooltip}
-        ownerState={ownerState}
+        title={tooltipTitle}
+        placement={tooltipPlacement}
+        onClose={handleTooltipClose}
+        onOpen={handleTooltipOpen}
+        open={open && tooltipOpenProp}
+        classes={TooltipClasses}
         {...other}
       >
-        <SpeedDialActionStaticTooltipLabel
-          style={transitionStyle}
-          id={`${id}-label`}
-          className={classes.staticTooltipLabel}
-          ownerState={ownerState}
-        >
-          {tooltipTitle}
-        </SpeedDialActionStaticTooltipLabel>
-        {React.cloneElement(fab, {
-          'aria-labelledby': `${id}-label`,
-        })}
-      </SpeedDialActionStaticTooltip>
+        {fab}
+      </PersistentTooltip>
     );
   }
 
