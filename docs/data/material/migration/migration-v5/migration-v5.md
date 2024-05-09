@@ -23,3 +23,7 @@ The steps you need to take to migrate from Material UI v5 to v6 are described 
 This list is a work in progress.
 Expect updates as new breaking changes are introduced.
 :::
+
+<!-- #default-branch-switch -->
+
+- Material UI no longer provides UMD bundle. Please refer to the [docs](https://next.mui.com/material-ui/getting-started/installation/#cdn) for alternatives.
