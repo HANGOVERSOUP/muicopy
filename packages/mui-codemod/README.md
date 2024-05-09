@@ -305,6 +305,22 @@ npx @mui/codemod@next deprecations/alert-props <path>
 npx @mui/codemod@next deprecations/autocomplete-props <path>
 ```
 
+#### `avatar-group-props`
+
+```diff
+ <AvatarGroup
+-  componentsProps={{
+-    additionalAvatar: {color: "red"}
++  slotProps={{
++    additionalAvatar: {color: "red"}
+   }}
+ />;
+```
+
+```bash
+npx @mui/codemod@next deprecations/avatar-group-props <path>
+```
+
 #### `avatar-props`
 
 ```diff
